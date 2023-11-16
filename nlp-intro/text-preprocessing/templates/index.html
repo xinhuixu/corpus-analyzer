@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nlp playground</title>
+</head>
+<body>
+    <h1>xinhui's natural language processing playground</h1>
+    <form action="/preprocess_text" method="post">
+        <label for="text">Enter Text:</label>
+        <textarea name="text" id="text" rows="4" cols="50"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    {% if original_text %}
+        <h2>Original Text:</h2>
+        <p>{{ original_text }}</p>
+        <h2>Stemmed Text:</h2>
+        <p>{{ stemmed_text }}</p>
+        <h2>Lemmatized Text:</h2>
+        <p>{{ lemmatized_text }}</p>
+    {% endif %}
+</body>
+</html>
