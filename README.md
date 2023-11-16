@@ -1,6 +1,7 @@
 # Running nlp-playground
 
- Follow these steps to run this app on your computer if you don't already use git.
+ - I try out some tools for natural language processing here as I am learning them from various sources, e.g. Codecademy.
+- Follow these steps to run this web app on your computer if you don't already use git.
 
 ## Prerequisites
 
@@ -34,7 +35,7 @@
     pip3 install -r requirements.txt
 
 
-## Step 6: Run the App!
+## Step 6: Run the App
 1. Run the following command to start the app.
     ```bash
     python3 nlp-playground.py
