@@ -9,8 +9,8 @@ from nltk.stem import WordNetLemmatizer
 from part_of_speech import get_part_of_speech
 
 # web app
-from flask import Flask, render_template, request # Import Flask and related modules
-app = Flask(__name__) # Create a Flask web application
+from flask import Flask, render_template, request 
+app = Flask(__name__) 
 
 @app.route('/')  # Define a route for the home page
 def index():
