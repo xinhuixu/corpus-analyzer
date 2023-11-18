@@ -8,6 +8,8 @@ from nltk.stem import WordNetLemmatizer
 # grabbing a part of speech function:
 from part_of_speech import get_part_of_speech
 
+import os
+
 # web app
 from flask import Flask, render_template, request 
 app = Flask(__name__) 
@@ -33,7 +35,40 @@ def preprocess_text():
         # Render the HTML template with the original text, stemmed text, and lemmatized text
         return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized)
 
+# Builds a corpus from .txt documents in a folder
+def build_corpus(folder_path):
+    # Initialize an empty list to store the text content of each document
+    corpus = []
+
+    for filename in os.listdir(folder_path):
+        if filename.endswith(".txt"):
+             # Construct the full path to the file
+            file_path = os.path.join(folder_path, filename)
+
+            # Open the file in read mode with utf-8 encoding
+            with open(file_path, 'r', encoding='utf-8') as file:
+                text = file.read()
+
+                #Append the text content to the corpus list
+                corpus.append(text)
+
+    return corpus
+
+    
+def main():
+    folder_path = 'source_text_1'
+
+    corpus = build_corpus(folder_path)
+
+    # Print the first 10 characters of each document in the corpus
+    for i, document in enumerate(corpus):
+        print(f"Document {i + 1}: {document[:10]}...")
+
+
+
 if __name__ == '__main__':
+    main()
+    
     app.run(debug=True)  # Run the Flask app in debug mode if executed directly
 
 
