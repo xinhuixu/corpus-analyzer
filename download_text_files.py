@@ -41,6 +41,7 @@ def download_text_files(url, download_folder):
         # Create the download folder if it doesn't exist
         os.makedirs(download_folder, exist_ok=True)
 
+        # For every downloadable files present...
         for link in links:
             # Get the href attribute from the link
             href = link.get('href')
@@ -50,21 +51,28 @@ def download_text_files(url, download_folder):
                 # Build the absolute URL
                 absolute_url = urljoin(url, href)
 
-                # Get the file name from the URL
+                # Get the text file name from the URL
                 file_name = os.path.join(download_folder, os.path.basename(href))
 
                 # Download the file
+                '''with statement is used here to ensure that the file is
+                    properly closed after writing, even if an error occurs 
+                    during the process'''
                 with open(file_name, 'wb') as file:
                     file_content = requests.get(absolute_url).content
                     file.write(file_content)
                     print(f"Downloaded: {file_name}")
+                    
+        print(f"Download completed for {url}. Files saved in {download_folder}")
 
     else:
         print(f"Failed to retrieve the webpage. Status code: {response.status_code}")
 
+'''
 # Specify the URL of the webpage and the folder to save the downloaded files
 webpage_url = 'http://www.textfiles.com/politics/CIA/'
 download_folder = 'downloaded_files'
 
 # Call the function to download text files
 download_text_files(webpage_url, download_folder)
+'''

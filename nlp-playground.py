@@ -5,23 +5,28 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
-# grabbing a part of speech function:
+
 from part_of_speech import get_part_of_speech
+from download_text_files import download_text_files
 
 import os
 
 # web app
-from flask import Flask, render_template, request 
+from flask import Flask, render_template, request, redirect, url_for 
 app = Flask(__name__) 
 
-@app.route('/')  # Define a route for the home page
+# Define a route for the home page
+@app.route('/')  
 def index():
-    return render_template('index.html')  # Render the HTML template for the home page
+    return render_template('index.html')  
 
-@app.route('/preprocess_text', methods=['POST'])  # Define a route for processing text when the form is submitted
+ # Define a route for processing text when the form is submitted
+@app.route('/preprocess_text', methods=['POST']) 
 def preprocess_text():
     if request.method == 'POST':  
-        text = request.form['text']  # Get the text from the submitted form
+        # Get the text from the submitted form
+        text = request.form['text']  
+        
         # Preprocess the text
         cleaned = re.sub('\W+', ' ', text)
         tokenized = word_tokenize(cleaned)
@@ -34,6 +39,27 @@ def preprocess_text():
 
         # Render the HTML template with the original text, stemmed text, and lemmatized text
         return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized)
+
+# Define a route for downloading text files when user submits url
+@app.route('/download_text_files_main', methods=['POST'])
+def download_text_files_main():
+    if request.method == 'POST':
+        user_url = request.form['url']
+
+        download_folder = 'downloaded_text_files'
+
+        download_text_files(user_url, download_folder)
+        success_message = f"Download completed successfully for URL: {user_url}. " \
+            f"Files saved in folder: {download_folder}"
+        
+       # This was bad because I didn't re-render the template, so msg did not show up! 
+       # return redirect(url_for('index', success_message=success_message))
+        return render_template('index.html', success_message=success_message)
+
+    # If the request is not a POST, redirect to the index page
+    return redirect(url_for('index'))
+
+
 
 # Builds a corpus from .txt documents in a folder
 def build_corpus(folder_path):
@@ -68,7 +94,7 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+
     app.run(debug=True)  # Run the Flask app in debug mode if executed directly
 
 

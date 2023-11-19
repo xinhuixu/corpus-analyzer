@@ -7,6 +7,8 @@
 </head>
 <body>
     <h1>xinhui's natural language processing playground</h1>
+
+    <h2>Stem and lemmmatize text input:</h2>
     <form action="/preprocess_text" method="post">
         <label for="text">Enter Text:</label>
         <textarea name="text" id="text" rows="4" cols="50"></textarea>
@@ -21,5 +23,18 @@
         <h2>Lemmatized Text:</h2>
         <p>{{ lemmatized_text }}</p>
     {% endif %}
+
+    <h2>Download all text files from a webpage to a local folder:</h2>
+    <p> Example: <a href="http://www.textfiles.com/politics/CIA/" target="_blank">http://www.textfiles.com/politics/CIA/</a></p>
+    <form action="/download_text_files_main" method="post">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Download Text Files</button>
+    </form>
+
+    {% if success_message %}
+    <p>{{ success_message }}</p>
+    {% endif %}
+
 </body>
 </html>
