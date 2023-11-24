@@ -50,7 +50,7 @@ def download_text_files_main():
 
         download_text_files(user_url, download_folder)
         success_message = f"Download completed successfully for URL: {user_url}. " \
-            f"Files saved in folder: {download_folder}"
+            f"Files saved in folder: {download_folder}" \
         
        # This was bad because I didn't re-render the template, so msg did not show up! 
        # return redirect(url_for('index', success_message=success_message))
@@ -60,35 +60,52 @@ def download_text_files_main():
     return redirect(url_for('index'))
 
 
-
 # Builds a corpus from .txt documents in a folder
-def build_corpus(folder_path):
+@app.route('/build_corpus', methods=['POST'])
+def build_corpus():
     # Initialize an empty list to store the text content of each document
     corpus = []
 
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".txt"):
-             # Construct the full path to the file
-            file_path = os.path.join(folder_path, filename)
+    if request.method == 'POST':
+        # Get the text from the submitted form
+        try:
+            folder_path = request.form['folder_path']
+        except KeyError:
+            return render_template('index.html', build_corpus_msg="KeyError: 'folder_path' not found in form data.")
 
-            # Open the file in read mode with utf-8 encoding
-            with open(file_path, 'r', encoding='utf-8') as file:
-                text = file.read()
+        # Check if the folder exists
+        if not os.path.exists(folder_path):
+            return render_template('index.html', build_corpus_msg=f"The folder '{folder_path}' does not exist.")
 
-                #Append the text content to the corpus list
-                corpus.append(text)
+        # Check if the folder is empty
+        if not os.listdir(folder_path):
+            return render_template('index.html', build_corpus_msg=f"The folder '{folder_path}' is empty.")
 
-    return corpus
+        for filename in os.listdir(folder_path):
+            if filename.endswith(".txt"):
+                # Construct the full path to the file
+                file_path = os.path.join(folder_path, filename)
+
+                # Open the file in read mode with utf-8 encoding
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    text = file.read()
+
+                    # Append the text content to the corpus list
+                    corpus.append(text)
+
+        # Check if corpus is empty
+        if not corpus:
+            return render_template('index.html', build_corpus_msg="Corpus is empty; no .txt files in folder.")
+        else:
+            return render_template('index.html', build_corpus_msg="Corpus built.")
+
 
     
 def main():
-    folder_path = 'source_text_1'
-
-    corpus = build_corpus(folder_path)
-
+    print("Running...")
     # Print the first 10 characters of each document in the corpus
-    for i, document in enumerate(corpus):
-        print(f"Document {i + 1}: {document[:10]}...")
+    #for i, document in enumerate(corpus):
+        #print(f"Document {i + 1}: {document[:10]}...")
 
 
 

@@ -31,9 +31,19 @@
         <input type="text" id="url" name="url" required>
         <button type="submit">Download Text Files</button>
     </form>
-
+    
     {% if success_message %}
     <p>{{ success_message }}</p>
+    {% endif %}
+
+    <h2>Build a corpus from a local folder:</h2>
+    <form action="/build_corpus" method="post">
+        <label for="text">Enter folder name (Example: downloaded_text_files):</label>
+        <input type="text" id="text" name="folder_path" required>
+        <button type="submit">Build corpus</button>
+    </form>
+    {% if build_corpus_msg %}
+    <p>{{ build_corpus_msg }}</p>
     {% endif %}
 
 </body>
