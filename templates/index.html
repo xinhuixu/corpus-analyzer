@@ -33,7 +33,7 @@
     </form>
     
     {% if success_message %}
-    <p>{{ success_message }}</p>
+        <p>{{ success_message }}</p>
     {% endif %}
 
     <h2>Build a corpus from a local folder:</h2>
@@ -43,8 +43,14 @@
         <button type="submit">Build corpus</button>
     </form>
     {% if build_corpus_msg %}
-    <p>{{ build_corpus_msg }}</p>
+        <p>{{ build_corpus_msg }}</p>
+
+        {% for document in corpus %}
+        <p>Document {{ loop.index }}: {{ document[:10] }}...</p>
+        {% endfor %}
     {% endif %}
+
+
 
 </body>
 </html>

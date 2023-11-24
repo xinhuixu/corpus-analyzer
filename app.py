@@ -55,13 +55,11 @@ def build_corpus_route():
     # Call build_corpus with the provided folder_path
     corpus, build_corpus_msg = build_corpus(folder_path)
 
-    return render_template('index.html', build_corpus_msg=build_corpus_msg)
+    return render_template('index.html', corpus=corpus, build_corpus_msg=build_corpus_msg)
     
 def main():
     print("Running...")
-    # Print the first 10 characters of each document in the corpus
-    #for i, document in enumerate(corpus):
-        #print(f"Document {i + 1}: {document[:10]}...")
+
 
 if __name__ == '__main__':
     main()
