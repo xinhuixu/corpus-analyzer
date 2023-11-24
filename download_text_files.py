@@ -25,6 +25,7 @@ Constructing absolute URLs involves combining a base URL and a
 '''
 from urllib.parse import urljoin
 
+
 # Downloads all the txt files present in url and put them in download_folder
 def download_text_files(url, download_folder):
     # Send a GET request to the URL
