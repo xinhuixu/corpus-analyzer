@@ -1,6 +1,13 @@
 # nlp-playground
 Analyze text files from the internet or on your computer.
 
+## Current features
+- Download all text files (*.txt) from a specified webpage to a user-defined folder.
+- Transform text from user input to dictionary-like data.
+
+## Target features
+- Transform text files in a folder to dictionary-like data.
+- Analysis and visualization options.
 ## Folder structure
 ```
 NLP-playground/
@@ -8,8 +15,8 @@ NLP-playground/
 ├── downloaded_text_files/    
 ├── templates/        # HTML templates
 ├── app.py            # Main application file 
-├── build_corpus.py   # Build analyzable data from text files in a folder
-├── download_text_files.py  # Save text files from a webpage to a folder
+├── build_corpus.py   
+├── download_text_files.py  
 ├── part_of_speech.py 
 ├── preprocess_text.py
 ├── requirements.txt  # Python dependencies
