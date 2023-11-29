@@ -10,3 +10,5 @@ def get_part_of_speech(word):
   
   most_likely_part_of_speech = pos_counts.most_common(1)[0][0]
   return most_likely_part_of_speech
+
+# From Codecademy free course
