@@ -19,7 +19,7 @@ def preprocess_text_route():
     if request.method == 'POST':  
         # Get the text from the submitted form
         text = preprocess(request.form['text'])
-        
+        print("Route text:", text)
         lemmatized_text = lemmatize(text)
         wordcloud_img = make_word_cloud(lemmatized_text)
         dependency = visualize_dependency(text)

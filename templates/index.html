@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nlp playground</title>
+
+    <style>
+        /* CSS to limit the width of the visualization container */
+        .visualization-container {
+            max-width: 800px; /* Adjust the maximum width as needed */
+            margin: 0 auto;   /* Center the container */
+        }
+    </style>
+
 </head>
 <body>
     <h1>language processing playground</h1>
@@ -11,10 +20,7 @@
     <h2>Analyze text input:</h2>
     <form action="/preprocess_text" method="post">
         <label for="text">Enter Text:</label>
-        <textarea name="text" id="text" rows="4" cols="50">One of the most important uses of technology in nature is the development of conservation tools. 
-            From wildlife tracking devices to habitat restoration techniques, 
-            we are constantly finding new ways to protect endangered species and their ecosystems. 
-            With the help of technology, we can make a real difference in the fight against extinction.  
+        <textarea name="text" id="text" rows="4" cols="50">One of the most important uses of technology in nature is the development of conservation tools. From wildlife tracking devices to habitat restoration techniques, we are constantly finding new ways to protect endangered species and their ecosystems. With the help of technology, we can make a real difference in the fight against extinction.  
         </textarea>
         <br>
         <input type="submit" value="Submit">
@@ -25,16 +31,23 @@
         <h3>Stemmed Text:</h3>
         <p>{{ stemmed_text }}</p>
        -->
-        <h3>Lemmatized text:</h3>
-        <p>{{ lemmatized_text }}</p>
        
-        <h3>Dependency visualization:</h3>
+        <h3>Visualize dependency by sentence:</h3>
         <!--The |safe here is to render SVG properly in html-->
-        <p>{{ dependency|safe }}</p>
+        <!--<p>{{ dependency|safe }}</p>-->
+
+         <!-- Display the DisplaCy visualizations for each sentence -->
+        {% for sentence_dependency in dependency %}
+        <div class="visualization-container">
+            {{ sentence_dependency|safe }}
+         </div>
+        {% endfor %}
 
         <h3>Word cloud:</h3>
         <img src="data:image/png;base64,{{ wordcloud_img }}" alt="Word Cloud">
 
+        <h3>Lemmatized text:</h3>
+        <p>{{ lemmatized_text }}</p>
     {% endif %}
 
     <h2>Download all text files from a webpage to a local folder:</h2>
