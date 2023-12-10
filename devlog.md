@@ -5,6 +5,8 @@
 - Identified issue with lemmatization: "uses" is incorrectly lemmatized as "us."
   - Discovered inaccuracies in determining part-of-speech by WordNetLemmatizer.
 - Resolved lemmatization issue with spaCy.
+- Added dependency visualization by sentence.
+- !ISSUE: some dependency inaccuracies.
 
 
 ## 2023-11-29

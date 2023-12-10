@@ -5,6 +5,7 @@ Analyze text files from the internet or on your computer.
 ## Usable features
 - Transform text from user input to dictionary-like data.
 - Display Word Cloud.
+- Display dependencies in sentences.
 - Download all text files (*.txt) from a specified webpage to a user-defined folder.
 
 ## Target features
