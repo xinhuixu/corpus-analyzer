@@ -21,11 +21,13 @@ def preprocess_text_route():
     if request.method == 'POST':  
         # Get the text from the submitted form
         text = request.form['text']
-        stemmed, lemmatized = preprocess_text(text)
+        
+        # stemmed, lemmatized = preprocess_text(text)
+        lemmatized = preprocess_text(text)
         img_data = make_word_cloud(lemmatized)
 
-        # Render the HTML template with the original text, stemmed text, lemmatized text, and word cloud
-        return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized, wordcloud_img=img_data)
+        # return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized, wordcloud_img=img_data)
+        return render_template('index.html', original_text=text, lemmatized_text=lemmatized, wordcloud_img=img_data)
 
 # Define a route for downloading text files when user submits url
 @app.route('/download_text_files', methods=['POST'])

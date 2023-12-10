@@ -6,6 +6,8 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 
+import spacy
+
 from part_of_speech import get_part_of_speech
 
 from wordcloud import WordCloud
@@ -13,7 +15,22 @@ import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
 
+
 def preprocess_text(text):
+    cleaned = re.sub('\W+', ' ', text)
+
+    # Load spaCy English model
+    nlp = spacy.load('en_core_web_sm')
+    
+    # Process the cleaned text with spaCy
+    doc = nlp(cleaned)
+
+    # Extract lemmatized tokens
+    lemmatized = [token.lemma_ for token in doc]
+
+    return lemmatized
+
+'''def preprocess_text(text):
         
         # Preprocess the text
         cleaned = re.sub('\W+', ' ', text)
@@ -27,7 +44,8 @@ def preprocess_text(text):
 
         return stemmed, lemmatized
        
-# The above is from a Codecademy free course
+# preprocess_text is from a Codecademy free course
+'''
 
 def make_word_cloud(lemmatized):
                 # Generate word cloud from lemmatized text
