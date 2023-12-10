@@ -1,9 +1,11 @@
 # nlp-playground
 Analyze text files from the internet or on your computer.
+![App Screenshot](images/screenshot-231210.png)
 
 ## Usable features
-- Download all text files (*.txt) from a specified webpage to a user-defined folder.
 - Transform text from user input to dictionary-like data.
+- Display Word Cloud.
+- Download all text files (*.txt) from a specified webpage to a user-defined folder.
 
 ## Target features
 - Transform text files in a folder to dictionary-like data.
