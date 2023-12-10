@@ -1,13 +1,14 @@
 # nlp-playground
 Analyze text files from the internet or on your computer.
 
-## Current features
+## Usable features
 - Download all text files (*.txt) from a specified webpage to a user-defined folder.
 - Transform text from user input to dictionary-like data.
 
 ## Target features
 - Transform text files in a folder to dictionary-like data.
-- Analysis and visualization options.
+- Download visible text data from specified webpage.
+- More analysis and visualization options.
 ## Folder structure
 ```
 NLP-playground/

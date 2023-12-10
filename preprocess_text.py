@@ -8,9 +8,12 @@ from nltk.stem import WordNetLemmatizer
 
 from part_of_speech import get_part_of_speech
 
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import base64
+from io import BytesIO
 
 def preprocess_text(text):
- 
         
         # Preprocess the text
         cleaned = re.sub('\W+', ' ', text)
@@ -24,4 +27,18 @@ def preprocess_text(text):
 
         return stemmed, lemmatized
        
-# From Codecademy free course
+# The above is from a Codecademy free course
+
+def make_word_cloud(lemmatized):
+                # Generate word cloud from lemmatized text
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(lemmatized))
+
+        # Save the word cloud image to a BytesIO object
+        img_buffer = BytesIO()
+        wordcloud.to_image().save(img_buffer, format='PNG')
+        img_buffer.seek(0)
+
+        # Encode the image as base64 to embed in the HTML
+        img_data = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+
+        return img_data

@@ -6,22 +6,29 @@
     <title>nlp playground</title>
 </head>
 <body>
-    <h1>xinhui's natural language processing playground</h1>
+    <h1>language processing playground</h1>
 
-    <h2>Stem and lemmmatize text input:</h2>
+    <h2>Analyze text input:</h2>
     <form action="/preprocess_text" method="post">
         <label for="text">Enter Text:</label>
-        <textarea name="text" id="text" rows="4" cols="50"></textarea>
+        <textarea name="text" id="text" rows="4" cols="50">One of the most important uses of technology in nature is the development of conservation tools. From wildlife tracking devices to habitat restoration techniques, we are constantly finding new ways to protect endangered species and their ecosystems. With the help of technology, we can make a real difference in the fight against extinction.  
+        </textarea>
         <br>
         <input type="submit" value="Submit">
     </form>
     {% if original_text %}
-        <h2>Original Text:</h2>
+       <!-- <h3>Original Text:</h3>
         <p>{{ original_text }}</p>
-        <h2>Stemmed Text:</h2>
+        <h3>Stemmed Text:</h3>
         <p>{{ stemmed_text }}</p>
-        <h2>Lemmatized Text:</h2>
+       -->
+        <h3>Lemmatized Text:</h3>
         <p>{{ lemmatized_text }}</p>
+
+       
+        <h3>Word cloud:</h3>
+        <img src="data:image/png;base64,{{ wordcloud_img }}" alt="Word Cloud">
+
     {% endif %}
 
     <h2>Download all text files from a webpage to a local folder:</h2>

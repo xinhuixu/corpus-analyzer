@@ -1,6 +1,8 @@
-from preprocess_text import preprocess_text
+from preprocess_text import preprocess_text, make_word_cloud
 from download_text_files import download_text_files
 from build_corpus import build_corpus
+
+
 
 import os
 
@@ -20,9 +22,10 @@ def preprocess_text_route():
         # Get the text from the submitted form
         text = request.form['text']
         stemmed, lemmatized = preprocess_text(text)
+        img_data = make_word_cloud(lemmatized)
 
-         # Render the HTML template with the original text, stemmed text, and lemmatized text
-        return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized)  
+        # Render the HTML template with the original text, stemmed text, lemmatized text, and word cloud
+        return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized, wordcloud_img=img_data)
 
 # Define a route for downloading text files when user submits url
 @app.route('/download_text_files', methods=['POST'])
