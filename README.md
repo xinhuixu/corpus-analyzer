@@ -1,6 +1,5 @@
 # nlp-playground
 Analyze text files from the internet or on your computer.
-![App Screenshot](images/screenshot-231210.png)
 
 ## Usable features
 - Transform text from user input to dictionary-like data.
