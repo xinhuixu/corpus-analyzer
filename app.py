@@ -1,8 +1,6 @@
-from preprocess_text import preprocess_text, make_word_cloud
+from preprocess_text import preprocess, lemmatize, make_word_cloud, visualize_dependency
 from download_text_files import download_text_files
 from build_corpus import build_corpus
-
-
 
 import os
 
@@ -20,14 +18,14 @@ def index():
 def preprocess_text_route():
     if request.method == 'POST':  
         # Get the text from the submitted form
-        text = request.form['text']
+        text = preprocess(request.form['text'])
         
-        # stemmed, lemmatized = preprocess_text(text)
-        lemmatized = preprocess_text(text)
-        img_data = make_word_cloud(lemmatized)
+        lemmatized_text = lemmatize(text)
+        wordcloud_img = make_word_cloud(lemmatized_text)
+        dependency = visualize_dependency(text)
 
         # return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized, wordcloud_img=img_data)
-        return render_template('index.html', original_text=text, lemmatized_text=lemmatized, wordcloud_img=img_data)
+        return render_template('index.html', original_text=text, lemmatized_text=lemmatized_text, wordcloud_img=wordcloud_img, dependency=dependency)
 
 # Define a route for downloading text files when user submits url
 @app.route('/download_text_files', methods=['POST'])

@@ -7,6 +7,7 @@ from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 
 import spacy
+from spacy import displacy
 
 from part_of_speech import get_part_of_speech
 
@@ -16,18 +17,20 @@ import base64
 from io import BytesIO
 
 
-def preprocess_text(text):
-    cleaned = re.sub('\W+', ' ', text)
+def preprocess(text):
+        cleaned = re.sub('\W+', ' ', text)
 
-    # Load spaCy English model
-    nlp = spacy.load('en_core_web_sm')
+        # Load spaCy English model
+        nlp = spacy.load('en_core_web_sm')
     
-    # Process the cleaned text with spaCy
-    doc = nlp(cleaned)
+        # Process the cleaned text with spaCy
+        doc = nlp(cleaned)
 
+        return doc
+      
+def lemmatize(doc):
     # Extract lemmatized tokens
     lemmatized = [token.lemma_ for token in doc]
-
     return lemmatized
 
 '''def preprocess_text(text):
@@ -47,9 +50,9 @@ def preprocess_text(text):
 # preprocess_text is from a Codecademy free course
 '''
 
-def make_word_cloud(lemmatized):
-                # Generate word cloud from lemmatized text
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(lemmatized))
+def make_word_cloud(list_of_words):
+                # Generate word cloud from list of words
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(list_of_words))
 
         # Save the word cloud image to a BytesIO object
         img_buffer = BytesIO()
@@ -60,3 +63,6 @@ def make_word_cloud(lemmatized):
         img_data = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
 
         return img_data
+
+def visualize_dependency(doc):
+       return displacy.render(doc, style="dep", options={'distance': 120}, jupyter=False)
