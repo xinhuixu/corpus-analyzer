@@ -4,28 +4,53 @@ from build_corpus import build_corpus
 
 import os
 
-# web app
-from flask import Flask, render_template, request, redirect, url_for 
+# Web app
+from flask import Flask, render_template, request, redirect, url_for, flash 
 app = Flask(__name__) 
 
-# Define a route for the home page
+# Route for the home page
 @app.route('/')  
 def index():
     return render_template('index.html')  
 
- # Define a route for processing text when the form is submitted
-@app.route('/preprocess_text', methods=['POST']) 
-def preprocess_text_route():
+# For text box input
+@app.route('/process_text', methods=['POST']) 
+def process_text_route():
     if request.method == 'POST':  
         # Get the text from the submitted form
         text = preprocess(request.form['text'])
-        print("Route text:", text)
+        print("Text box input:", text)
         lemmatized_text = lemmatize(text)
         wordcloud_img = make_word_cloud(lemmatized_text)
-        dependency = visualize_dependency(text)
+        # dependency = visualize_dependency(text)
 
-        # return render_template('index.html', original_text=text, stemmed_text=stemmed, lemmatized_text=lemmatized, wordcloud_img=img_data)
-        return render_template('index.html', original_text=text, lemmatized_text=lemmatized_text, wordcloud_img=wordcloud_img, dependency=dependency)
+        return render_template('index.html', original_text=text, lemmatized_text=lemmatized_text, wordcloud_img=wordcloud_img)
+
+# For text file upload
+@app.route('/process_text_upload', methods=['POST'])
+def process_text_upload_route():
+    if 'file' not in request.files or request.files['file'].filename =='':
+        flash('No file selected', 'error')
+        return redirect(url_for('index'))
+    
+    file = request.files['file']
+    if not file.filename.endswith('.txt'):
+            flash('Invalid file type. Please upload a .txt file', 'error')
+            return redirect(url_for('index'))
+    
+    try:
+        text = file.read().decode('utf-8')
+        print("Text file uploaded:", text)
+    except Exception as e:
+         flash('Error processing file: {e}', 'error')
+         return redirect(url_for('index'))
+    
+    # Process the text file
+    lemmatized_text = lemmatize(text)
+    wordcloud_img = make_word_cloud(lemmatized_text)
+    return render_template('index.html', original_text_upload=text, lemmatized_text_upload=lemmatized_text, wordcloud_img_upload=wordcloud_img)
+
+
 
 # Define a route for downloading text files when user submits url
 @app.route('/download_text_files', methods=['POST'])

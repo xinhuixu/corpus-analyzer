@@ -28,4 +28,5 @@ def build_corpus(folder_path):
     if not corpus:
         return [], "Corpus is empty; no .txt files in folder."
     else:
+        print (corpus)
         return corpus, "Corpus built. Right now it's just a list of texts."

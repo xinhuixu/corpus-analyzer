@@ -17,38 +17,40 @@
 <body>
     <h1>language processing playground</h1>
 
+<!------------------- Text box ---------------------->
     <h2>Analyze text input:</h2>
-    <form action="/preprocess_text" method="post">
-        <label for="text">Enter Text:</label>
-        <textarea name="text" id="text" rows="4" cols="50">One of the most important uses of technology in nature is the development of conservation tools. From wildlife tracking devices to habitat restoration techniques, we are constantly finding new ways to protect endangered species and their ecosystems. With the help of technology, we can make a real difference in the fight against extinction.  
-        </textarea>
+    <form action="/process_text" method="post">
+   
+        <label for="text">Enter text:</label>
+        <textarea name="text" id="text" rows="4" cols="50"></textarea>
         <br>
         <input type="submit" value="Submit">
     </form>
-    {% if original_text %}
-       <!-- <h3>Original Text:</h3>
-        <p>{{ original_text }}</p>
-        <h3>Stemmed Text:</h3>
-        <p>{{ stemmed_text }}</p>
-       -->
-       
-        <h3>Visualize dependency by sentence:</h3>
-        <!--The |safe here is to render SVG properly in html-->
-        <!--<p>{{ dependency|safe }}</p>-->
 
+    {% if original_text %}
+     {#  <!-- Hiding dependency feature -->    
+        <h3>Visualize dependency by sentence:</h3>
          <!-- Display the DisplaCy visualizations for each sentence -->
         {% for sentence_dependency in dependency %}
         <div class="visualization-container">
             {{ sentence_dependency|safe }}
          </div>
         {% endfor %}
-
+        #}
         <h3>Word cloud:</h3>
         <img src="data:image/png;base64,{{ wordcloud_img }}" alt="Word Cloud">
-
         <h3>Lemmatized text:</h3>
         <p>{{ lemmatized_text }}</p>
     {% endif %}
+
+<!---------------Text file upload------------------->
+    <h2>Analyze text file from upload:</h2>
+    <form action="/process_text_upload" method="post" enctype="multipart/form-data">
+
+        <input type="file" id="file" name="file" accept=".txt">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
 
     <h2>Download all text files from a webpage to a local folder:</h2>
     <p> Example: <a href="http://www.textfiles.com/politics/CIA/" target="_blank">http://www.textfiles.com/politics/CIA/</a></p>
