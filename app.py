@@ -1,7 +1,7 @@
 from preprocess_text import preprocess, lemmatize, make_word_cloud, visualize_dependency
 from download_text_files import download_text_files
 from build_corpus import build_corpus
-
+from parse_transcript import parse_transcript
 import os
 
 # Web app
@@ -26,9 +26,9 @@ def process_text_route():
 
         return render_template('index.html', original_text=text, lemmatized_text=lemmatized_text, wordcloud_img=wordcloud_img)
 
-# For text file upload
-@app.route('/process_text_upload', methods=['POST'])
-def process_text_upload_route():
+# For transcript file upload
+@app.route('/process_transcript_upload', methods=['POST'])
+def process_transcript_upload_route():
     if 'file' not in request.files or request.files['file'].filename =='':
         flash('No file selected', 'error')
         return redirect(url_for('index'))
@@ -41,16 +41,21 @@ def process_text_upload_route():
     try:
         text = file.read().decode('utf-8')
         print("Text file uploaded:", text)
+
+    # Parse uploaded transcript into a Python dictionary
+        transcript_data = parse_transcript(text)
+        return render_template('transcript_display.html', filename=request.files['file'].filename, transcript_data=transcript_data)
+
     except Exception as e:
          flash('Error processing file: {e}', 'error')
          return redirect(url_for('index'))
     
     # Process the text file
-    lemmatized_text = lemmatize(text)
-    wordcloud_img = make_word_cloud(lemmatized_text)
-    return render_template('index.html', original_text_upload=text, lemmatized_text_upload=lemmatized_text, wordcloud_img_upload=wordcloud_img)
+    # lemmatized_text = lemmatize(text)
+    # wordcloud_img = make_word_cloud(lemmatized_text)
+    # return render_template('index.html', original_text_upload=text, lemmatized_text_upload=lemmatized_text, wordcloud_img_upload=wordcloud_img)
 
-
+    
 
 # Define a route for downloading text files when user submits url
 @app.route('/download_text_files', methods=['POST'])

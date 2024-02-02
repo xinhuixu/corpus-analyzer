@@ -1,5 +1,11 @@
 # Development log
 
+## 2024-2-2
+*Began adaptation for the ALTESOL corpus project.
+- Hide all extra features for now.
+- Added parsing sample transcript into Python dictionary.
+- Added transcript display page that renders dict as tables
+
 ## 2024-1-31
 - Start text file upload functionality.
 - Hide dependency for now.
