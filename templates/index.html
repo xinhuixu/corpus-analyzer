@@ -11,6 +11,9 @@
 
 <!---------------Text file upload------------------->
     <h2>Analyze transcript file (*.txt):</h2>
+    <p>*Assumes the text follows the output format of the 
+        <a href="https://archive.mpi.nl/tla/elan" target="_blank">ELAN transcription tool.</a>
+        See a sample <a href="{{ url_for('static', filename='230302_transcribed.txt') }}" target="_blank">here.</a></p>
     <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
 
         <input type="file" id="file" name="file" accept=".txt">
