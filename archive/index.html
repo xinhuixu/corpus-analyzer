@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corpus analyzer (under construction)</title>
+
+    <style>
+        /* CSS to limit the width of the visualization container */
+        .visualization-container {
+            max-width: 800px; /* Adjust the maximum width as needed */
+            margin: 0 auto;   /* Center the container */
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Corpus analyzer (under construction)</h1>
+
+
+<!------------------- Text box ---------------------->
+<!--    <h2>Analyze text input:</h2>
+    <form action="/process_text" method="post">
+   
+        <label for="text">Enter text:</label>
+        <textarea name="text" id="text" rows="4" cols="50"></textarea>
+        <br>
+        <input type="submit" value="Submit">
+    </form> 
+-->
+
+<!---------------Text file upload------------------->
+    <h2>Analyze transcript file (*.txt):</h2>
+    <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
+
+        <input type="file" id="file" name="file" accept=".txt">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if original_text_upload %}
+    
+    <!-- Hiding dependency feature --> 
+    {#  
+       <h3>Visualize dependency by sentence:</h3>
+        <!-- Display the DisplaCy visualizations for each sentence -->
+       {% for sentence_dependency in dependency %}
+       <div class="visualization-container">
+           {{ sentence_dependency|safe }}
+        </div>
+       {% endfor %}
+    #}
+    <!------------------------------->
+   
+    <!--<h3>Word cloud:</h3>
+       <img src="data:image/png;base64,{{ wordcloud_img }}" alt="Word Cloud">
+        
+       <h3>Lemmatized text:</h3>
+       <p>{{ lemmatized_text }}</p>
+    -->
+
+       <h3>Uploaded text:</h3>
+       <p>{{ original_text_upload }}</p>
+
+   {% endif %}
+<!-----------
+    <h2>Extra features</h2>
+    <h2>Download all text files from a webpage to a local folder:</h2>
+    <p> Example: <a href="http://www.textfiles.com/politics/CIA/" target="_blank">http://www.textfiles.com/politics/CIA/</a></p>
+    <form action="/download_text_files" method="post">
+        <label for="url">Enter URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Download Text Files</button>
+    </form>
+    
+    {% if success_message %}
+        <p>{{ success_message }}</p>
+    {% endif %}
+
+    <h2>Build a corpus from a local folder:</h2>
+    <form action="/build_corpus" method="post">
+        <label for="text">Enter folder name (Example: downloaded_text_files):</label>
+        <input type="text" id="text" name="folder_path" required>
+        <button type="submit">Build corpus</button>
+    </form>
+    {% if build_corpus_msg %}
+        <p>{{ build_corpus_msg }}</p>
+
+        {% for document in corpus %}
+        <p>Document {{ loop.index }}: {{ document[:10] }}...</p>
+        {% endfor %}
+    {% endif %}
+
+------->
+
+</body>
+</html>

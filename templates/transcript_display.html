@@ -19,6 +19,18 @@
         <h4><a href="/">Return to index</a></h4>
     </header>
     
+    <form action="/filter_by_speaker" method="get">
+        <label for="speaker"><b>Filter by speaker:</b></label>
+        <select name="speaker">
+          <option value="Default">Default</option>
+          {% for speaker in speakers %}
+          <option value="{{ speaker }}">{{ speaker }}</option>
+          {% endfor %}
+        </select>
+        <input type="submit" value="Filter">
+      </form>
+      <br>
+
     <table border="1">
         <tr>
             <th>Speaker</th>
