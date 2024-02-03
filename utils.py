@@ -19,23 +19,6 @@ def lemmatize(doc):
     lemmatized = [token.lemma_ for token in doc if not token.is_punct and not token.is_space]
     return lemmatized
 
-'''def preprocess_text(text):
-        
-        # Preprocess the text
-        cleaned = re.sub('\W+', ' ', text)
-        tokenized = word_tokenize(cleaned)
-
-        stemmer = PorterStemmer()
-        stemmed = [stemmer.stem(token) for token in tokenized]
-
-        lemmatizer = WordNetLemmatizer()
-        lemmatized = [lemmatizer.lemmatize(token, get_part_of_speech(token)) for token in tokenized]
-
-        return stemmed, lemmatized
-       
-# preprocess_text is from a Codecademy free course
-'''
-
 def make_word_cloud(list_of_words):
                 # Generate word cloud from list of words
         wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(list_of_words))
@@ -62,3 +45,16 @@ def visualize_dependency(doc):
                 sentence_visualizations.append(visualize_data)
         
         return sentence_visualizations
+
+# Parse transcript text
+def parse_transcript(text):
+    pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+    transcript_data = []
+    for match in pattern.finditer(text):
+        speaker, speech, timestamp = match.groups()
+        transcript_data.append({
+            "speaker": speaker.strip(),
+            "timestamp": timestamp.strip(),
+            "speech": speech.strip().replace('\n', ' ')
+        })
+    return transcript_data
