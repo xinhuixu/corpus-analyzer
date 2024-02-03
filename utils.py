@@ -46,15 +46,33 @@ def visualize_dependency(doc):
         
         return sentence_visualizations
 
-# Parse transcript text
+# Parse transcript text (assumes ELAN output)
 def parse_transcript(text):
+    # Compile a regular expression pattern to match speaker names (Student or Teacher followed by a digit),
+    # followed by their speech, and then a timestamp in a specific format.
     pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+   
     transcript_data = []
+   
+    # Use the compiled pattern to find all matches (segments) in the text
     for match in pattern.finditer(text):
+        # Extract speaker, speech, and timestamp from each match
         speaker, speech, timestamp = match.groups()
+
         transcript_data.append({
             "speaker": speaker.strip(),
             "timestamp": timestamp.strip(),
             "speech": speech.strip().replace('\n', ' ')
         })
     return transcript_data
+
+def filter_by_speaker(transcript_data, speaker):
+    filtered_data = [entry for entry in transcript_data if entry['speaker'] == speaker]
+    return filtered_data
+
+def get_list_of_speakers(transcript_data):
+      # Set automatically enforce uniqueness
+      speakers_set = {entry['speaker'] for entry in transcript_data}
+      unique_speakers = list(speakers_set)
+      return unique_speakers
+      
