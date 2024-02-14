@@ -1,4 +1,4 @@
-from utils import parse_transcript, get_list_of_speakers, filter_by_speaker
+from utils import parse_transcript, get_list_of_speakers, filter_by_speaker, calculate_airtimes, generate_pie_chart
 import os
 
 # Web app
@@ -15,12 +15,12 @@ def index():
 @app.route('/process_transcript_upload', methods=['POST'])
 def process_transcript_upload_route():
     if 'file' not in request.files or request.files['file'].filename =='':
-        flash('No file selected', 'error')
+        flash(f'No file selected', 'error')
         return redirect(url_for('index'))
     
     file = request.files['file']
     if not file.filename.endswith('.txt'):
-            flash('Invalid file type. Please upload a .txt file', 'error')
+            flash(f'Invalid file type. Please upload a .txt file', 'error')
             return redirect(url_for('index'))
     
     try:
@@ -40,13 +40,12 @@ def process_transcript_upload_route():
         return render_template('transcript_display.html', filename=filename, transcript_data=transcript_data, speakers=speakers)
 
     except Exception as e:
-         flash('Error processing file: {e}', 'error')
+         flash(f'Error processing file: {e}', 'error')
          return redirect(url_for('index'))
 
 @app.route('/filter_by_speaker', methods=['GET'])
 def filter_by_speaker_route():
     selected_speaker = request.args.get('speaker')
-    print("SELECTED SPEAKER: ", selected_speaker)
     transcript_data = session.get('transcript_data', [])
     speakers = session.get('speakers', [])
     filename = session.get('filename')
@@ -58,8 +57,21 @@ def filter_by_speaker_route():
     # With filtering
     if selected_speaker:
         filtered_transcript = filter_by_speaker(transcript_data, selected_speaker)
-        print("Filtered transcript:", filtered_transcript)
         return render_template('transcript_display.html', filename=filename, transcript_data=filtered_transcript, speakers=speakers)
+
+@app.route('/analyze_airtime', methods=['GET'])
+def analyze_airtime_route():
+    filename = session.get('filename')
+    transcript_data = session.get('transcript_data', [])
+    speakers = session.get('speakers', [])
+    airtimes = calculate_airtimes(transcript_data)
+    total_airtime = sum(airtimes.values())
+    
+    # Sort airtimes in descending order
+    sorted_airtimes = {k: v for k, v in sorted(airtimes.items(), key=lambda item: item[1], reverse=True)}
+
+    pie_chart_filename = generate_pie_chart(sorted_airtimes)
+    return render_template('transcript_display.html', filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, pie_chart_filename=pie_chart_filename)
 
 def main():
     print("Running...")
