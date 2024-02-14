@@ -11,6 +11,23 @@
             background-color: #f9f9f9; /* Light grey background */
             z-index: 1000; /* Ensures it stays on top of other content */
         }
+        img {
+            max-width: 500px;
+            height: auto;
+        }
+        .airtime-button {
+            background-color: #4CAF50; 
+            color: white; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            font-family: serif;
+            font-weight: bold;
+            border-radius: 4px; /* Rounded corners */
+            cursor: pointer; /* Cursor on hover */
+    }
+    .airtime-button:hover {
+        background-color: #45a049; /* Darker green */
+    }
     </style>
 </head>
 <body>
@@ -19,6 +36,34 @@
         <h4><a href="/">Return to index</a></h4>
     </header>
     
+    <form action="/analyze_airtime" method="get">
+        <button class="airtime-button" type="submit">Analyze airtime</button>
+    </form>
+
+    <br>
+    {% if airtimes %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Speaker</th>
+                <th>Airtime (seconds)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for speaker, duration in airtimes.items() %}
+            <tr>
+                <td>{{ speaker }}</td>
+                <td>{{ duration }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Total Airtime: {{ total_airtime }} seconds</p>
+    <img src="{{ url_for('static', filename=pie_chart_filename) }}" alt="Pie chart">
+
+    <br>
+    {% endif %}
+
     <form action="/filter_by_speaker" method="get">
         <label for="speaker"><b>Filter by speaker:</b></label>
         <select name="speaker">

@@ -2,9 +2,13 @@ import re
 import spacy
 from spacy import displacy
 from wordcloud import WordCloud
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import base64
 from io import BytesIO
+from datetime import datetime
+from collections import defaultdict
 
   # Load spaCy English model
 nlp = spacy.load('en_core_web_sm')
@@ -46,7 +50,8 @@ def visualize_dependency(doc):
         
         return sentence_visualizations
 
-# Parse transcript text (assumes ELAN output)
+# Parse transcript text (assumes ELAN format)
+# Return [{'speaker': ____, 'speech':___, 'timestamp':____}, {...}]
 def parse_transcript(text):
     # Compile a regular expression pattern to match speaker names (Student or Teacher followed by a digit),
     # followed by their speech, and then a timestamp in a specific format.
@@ -75,4 +80,42 @@ def get_list_of_speakers(transcript_data):
       speakers_set = {entry['speaker'] for entry in transcript_data}
       unique_speakers = list(speakers_set)
       return unique_speakers
-      
+
+
+def calculate_airtimes(transcript_data):
+    airtimes = defaultdict(float)
+    # When accessing or modyfing a key that doesn't exist,
+    # defaultdict automatically creates an entry for that key (0) 
+
+    for entry in transcript_data:
+        speaker = entry['speaker']
+        timestamp = entry['timestamp']
+        start_time, end_time = timestamp.split(' - ')
+
+        # Convert timestamps to datetime objects
+        format = '%H:%M:%S.%f'
+        start = datetime.strptime(start_time, format)
+        end = datetime.strptime(end_time, format)
+
+        # Calculate duration and add to speaker's total airtime
+        duration = (end - start).total_seconds()
+        airtimes[speaker] += duration
+
+    # Round the durations
+    rounded_airtimes = {speaker: round(duration, 1) for speaker, duration in airtimes.items()}
+    return rounded_airtimes
+
+
+def generate_pie_chart(airtimes):
+    labels = airtimes.keys()
+    sizes = airtimes.values()
+
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', textprops={'fontsize': 18})
+    plt.title('Distribution of Airtime by Speaker', fontsize=20)
+
+    pie_chart_filename = 'pie_chart.png'
+    plt.savefig(f'static/{pie_chart_filename}')
+
+    print("Pie chart image saved:", pie_chart_filename)
+    return pie_chart_filename
