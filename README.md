@@ -1,7 +1,9 @@
 # corpus-analyzer (under construction)
 Analyze language classroom transcripts. Built for the [Language & Tech Research Group](https://sites.google.com/tc.columbia.edu/al-tesol-language-technology/projects/altec-learner-corpus?authuser=0) @ Teachers College.
 
-## Installation guide
+## Installation guide (2/15/24)
+![Installing-GIF](/static/corpus-analyzer-install-1-021524.gif)
+![Running-GIF](/static/corpus-analyzer-install-2-021524.gif)
 Prerequisites: [Python](https://www.python.org/) & [Git](https://github.com/git-guides/install-git) installed on your computer.
 
 ### Step 1: Clone the project
