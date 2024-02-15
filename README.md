@@ -5,7 +5,7 @@ Analyze language classroom transcripts. Built for the [Language & Tech Research 
 ## Installation
 1.) On a terminal:
    ```bash
-   git clone https://github.com/xinhuixu/nlp-playground.git
+   git clone https://github.com/xinhuixu/corpus-analyzer.git
    ```
    ```bash
    pip install -r requirements.txt
