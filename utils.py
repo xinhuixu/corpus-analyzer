@@ -1,7 +1,7 @@
 import re
-import spacy
-from spacy import displacy
-from wordcloud import WordCloud
+#import spacy
+#from spacy import displacy
+#from wordcloud import WordCloud
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -10,6 +10,7 @@ from io import BytesIO
 from datetime import datetime
 from collections import defaultdict
 
+'''
   # Load spaCy English model
 nlp = spacy.load('en_core_web_sm')
 
@@ -49,6 +50,7 @@ def visualize_dependency(doc):
                 sentence_visualizations.append(visualize_data)
         
         return sentence_visualizations
+'''
 
 # Parse transcript text (assumes ELAN format)
 # Return [{'speaker': ____, 'speech':___, 'timestamp':____}, {...}]
