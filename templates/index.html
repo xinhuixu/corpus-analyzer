@@ -16,7 +16,7 @@
         See a sample <a href="{{ url_for('static', filename='230302_transcribed.txt') }}" target="_blank">here.</a></p>
     <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
 
-        <input type="file" id="file" name="file" accept=".txt">
+        <input type="file" id="file" name="files" accept=".txt" multiple>
         <br>
         <input type="submit" value="Submit">
     </form>
