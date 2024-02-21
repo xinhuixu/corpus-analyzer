@@ -36,7 +36,7 @@
         <h4><a href="/">Return to index</a></h4>
     </header>
     
-    <form action="/analyze_airtime" method="get">
+    <form action="/analyze_airtime/{{ transcript_id }}" method="get">
         <button class="airtime-button" type="submit">Analyze airtime</button>
     </form>
 
@@ -64,7 +64,7 @@
     <br>
     {% endif %}
 
-    <form action="/filter_by_speaker" method="get">
+    <form action="/filter_by_speaker/{{ transcript_id }}" method="get">
         <label for="speaker"><b>Filter by speaker:</b></label>
         <select name="speaker">
           <option value="Default">Default</option>

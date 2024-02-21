@@ -84,7 +84,7 @@ def transcript_display_route(transcript_id):
     speakers = get_list_of_speakers(transcript_data)
 
     # Render your original transcript_display.html with the fetched data
-    return render_template('transcript_display.html', filename=transcript.filename, transcript=transcript, transcript_data=transcript_data, speakers=speakers)
+    return render_template('transcript_display.html', transcript_id=transcript_id, filename=transcript.filename, transcript=transcript, transcript_data=transcript_data, speakers=speakers)
 
 '''
 # For transcript file upload
@@ -120,35 +120,38 @@ def process_transcript_upload_route():
          return redirect(url_for('index'))
 '''
 
-@app.route('/filter_by_speaker', methods=['GET'])
-def filter_by_speaker_route():
+@app.route('/filter_by_speaker/<int:transcript_id>', methods=['GET'])
+def filter_by_speaker_route(transcript_id):
     selected_speaker = request.args.get('speaker')
-    transcript_data = session.get('transcript_data', [])
-    speakers = session.get('speakers', [])
-    filename = session.get('filename')
 
+    transcript = Transcript.query.get_or_404(transcript_id)
+    transcript_data = parse_transcript(transcript.text)
+    speakers = get_list_of_speakers(transcript_data)
+    filename = transcript.filename
     # No filtering
     if selected_speaker == 'Default':
-        return render_template('transcript_display.html', filename=filename, transcript_data=transcript_data, speakers=speakers)
+        return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers)
     
     # With filtering
     if selected_speaker:
         filtered_transcript = filter_by_speaker(transcript_data, selected_speaker)
-        return render_template('transcript_display.html', filename=filename, transcript_data=filtered_transcript, speakers=speakers)
+        return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=filtered_transcript, speakers=speakers)
 
-@app.route('/analyze_airtime', methods=['GET'])
-def analyze_airtime_route():
-    filename = session.get('filename')
-    transcript_data = session.get('transcript_data', [])
-    speakers = session.get('speakers', [])
+@app.route('/analyze_airtime/<int:transcript_id>', methods=['GET'])
+def analyze_airtime_route(transcript_id):    
+    transcript = Transcript.query.get_or_404(transcript_id)
+    transcript_data = parse_transcript(transcript.text)
+    speakers = get_list_of_speakers(transcript_data)
+    filename = transcript.filename
+
     airtimes = calculate_airtimes(transcript_data)
     total_airtime = sum(airtimes.values())
-    
+
     # Sort airtimes in descending order
     sorted_airtimes = {k: v for k, v in sorted(airtimes.items(), key=lambda item: item[1], reverse=True)}
 
     pie_chart_filename = generate_pie_chart(sorted_airtimes)
-    return render_template('transcript_display.html', filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, pie_chart_filename=pie_chart_filename)
+    return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, pie_chart_filename=pie_chart_filename)
 
 def main():
     print("Running...")
