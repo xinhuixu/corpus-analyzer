@@ -24,7 +24,8 @@ class Transcript(db.Model):
 # Route for the home page
 @app.route('/')  
 def index():
-    return render_template('index.html')  
+    transcripts = Transcript.query.all() 
+    return render_template('index.html', transcripts=transcripts)  
 
 @app.route('/process_transcript_upload', methods=['POST'])
 def process_transcript_upload_route():
@@ -72,10 +73,10 @@ def process_transcript_upload_route():
         print(f'Successfully processed files: {", ".join(processed_files)}')
 
      # Assuming we've saved each transcript and have their IDs
-        transcripts = Transcript.query.all()  # Or filter based on current user/session
+        transcripts = Transcript.query.all() 
 
-        # Redirect to the summary page with the list of transcripts
-        return render_template('upload_summary.html', transcripts=transcripts)
+        # Re-render index page with updated list of transcripts
+        return render_template('index.html', transcripts=transcripts)
 
 @app.route('/transcript/<int:transcript_id>')
 def transcript_display_route(transcript_id):
@@ -85,6 +86,14 @@ def transcript_display_route(transcript_id):
 
     # Render your original transcript_display.html with the fetched data
     return render_template('transcript_display.html', transcript_id=transcript_id, filename=transcript.filename, transcript=transcript, transcript_data=transcript_data, speakers=speakers)
+
+@app.route('/delete_transcript/<int:transcript_id>', methods=['POST'])
+def delete_transcript_route(transcript_id):
+    transcript_to_delete = Transcript.query.get_or_404(transcript_id)
+    db.session.delete(transcript_to_delete)
+    db.session.commit()
+    flash('Transcript deleted successfully', 'success')
+    return redirect(url_for('index'))
 
 '''
 # For transcript file upload

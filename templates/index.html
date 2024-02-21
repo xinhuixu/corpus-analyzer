@@ -13,7 +13,7 @@
     <h2>Analyze transcript file (*.txt):</h2>
     <p>*Assumes the text follows the output format of the 
         <a href="https://archive.mpi.nl/tla/elan" target="_blank">ELAN transcription tool.</a>
-        See a sample <a href="{{ url_for('static', filename='230302_transcribed.txt') }}" target="_blank">here.</a></p>
+        See a sample <a href="{{ url_for('static', filename='sample_transcript_1.txt') }}" target="_blank">here.</a></p>
     <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
 
         <input type="file" id="file" name="files" accept=".txt" multiple>
@@ -21,5 +21,19 @@
         <input type="submit" value="Submit">
     </form>
 
+
+    <h2>Transcripts stored in local database:</h2>
+    <ul>
+        {% for transcript in transcripts %}
+        <li>
+            <a href="{{ url_for('transcript_display_route', transcript_id=transcript.id) }}">{{ transcript.filename }}</a>
+        
+            <!-- Delete form -->
+            <form action="{{ url_for('delete_transcript_route', transcript_id=transcript.id) }}" method="post" style="display: inline;">
+                <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this transcript?');">
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
