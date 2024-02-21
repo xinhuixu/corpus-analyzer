@@ -10,8 +10,8 @@
 
 
 <!---------------Text file upload------------------->
-    <h2>Analyze transcript file (*.txt):</h2>
-    <p>*Assumes the text follows the output format of the 
+    <h2>Analyze transcript files (*.txt):</h2>
+    <p>*Assumes the texts follow the output format of the 
         <a href="https://archive.mpi.nl/tla/elan" target="_blank">ELAN transcription tool.</a>
         See a sample <a href="{{ url_for('static', filename='sample_transcript_1.txt') }}" target="_blank">here.</a></p>
     <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
@@ -23,6 +23,9 @@
 
 
     <h2>Transcripts stored in local database:</h2>
+    <form action="{{ url_for('delete_all_transcripts_route') }}" method="post" onsubmit="return confirm('Are you sure you want to remove all transcripts? This action cannot be undone.');">
+        <input type="submit" value="Clear database">
+    </form>
     <ul>
         {% for transcript in transcripts %}
         <li>
@@ -30,7 +33,7 @@
         
             <!-- Delete form -->
             <form action="{{ url_for('delete_transcript_route', transcript_id=transcript.id) }}" method="post" style="display: inline;">
-                <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this transcript?');">
+                <input type="submit" value="Remove" onclick="return confirm('Are you sure you want to remove this transcript?');">
             </form>
         </li>
         {% endfor %}

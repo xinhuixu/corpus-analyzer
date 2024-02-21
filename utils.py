@@ -57,8 +57,10 @@ def visualize_dependency(doc):
 def parse_transcript(text):
     # Compile a regular expression pattern to match speaker names (Student or Teacher followed by a digit),
     # followed by their speech, and then a timestamp in a specific format.
-    pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+   #pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
    
+    pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.+?)\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+
     transcript_data = []
    
     # Use the compiled pattern to find all matches (segments) in the text

@@ -95,6 +95,18 @@ def delete_transcript_route(transcript_id):
     flash('Transcript deleted successfully', 'success')
     return redirect(url_for('index'))
 
+@app.route('/delete_all_transcripts', methods=['POST'])
+def delete_all_transcripts_route():
+    try:
+        # Deletes all transcripts from the database
+        Transcript.query.delete()
+        db.session.commit()
+        flash('All transcripts have been deleted successfully', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting transcripts: {e}', 'error')
+    return redirect(url_for('index'))
+
 '''
 # For transcript file upload
 @app.route('/process_transcript_upload', methods=['POST'])
