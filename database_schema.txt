@@ -1,0 +1,21 @@
+Table: Transcript
+Description: Stores information about audio transcript files, including metadata and parsed content.
+
+Columns:
+- id (Integer): Automatically generated numerical identifier of the transcript
+- filename (String, 255 characters, NOT NULL, UNIQUE): The name of the transcript file as uploaded.
+- text (Text, NOT NULL): Raw text content of the transcript as uploaded.
+- transcript_data (JSON, nullable): Structured representation of the parsed transcript content.
+    Example:
+    [{'speaker': 'Student 1', 'timestamp': '00:00:10.500 - 00:00:12.300', 'speech': "So, it's like saying 'brother' in English?"},
+     {'speaker': 'Teacher 1', 'timestamp': '00:00:12.310 - 00:00:16.789', 'speech': 'Exactly, but in our target language, the word carries more cultural significance.'},
+     ...]
+- speakers (JSON, nullable): List of unique speakers identified in the transcript.
+    Example:
+    ['Student 2', 'Student 4', 'Student 1', 'Student 3', 'Teacher 1']
+- airtimes (JSON, nullable): Summary of speaking times for each speaker.
+    Example:
+    {'Student 1': 5.1, 'Teacher 1': 49.5, 'Student 2': 4.0, 'Student 3': 4.8, 'Student 4': 5.5}
+- airtimes_chart_path (String, 255 characters, nullable): File path to the generated pie chart visualizing speaker airtimes.
+    Example:
+    airtimes_chart_sample_transcript_2.txt.png

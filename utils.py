@@ -118,7 +118,7 @@ def generate_pie_chart(airtimes, filename):
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', textprops={'fontsize': 18})
     plt.title('Distribution of Airtime by Speaker: ' + filename , fontsize=20)
 
-    pie_chart_filename = 'pie_chart_' + filename + '.png'
+    pie_chart_filename = 'airtimes_chart_' + filename + '.png'
     plt.savefig(f'static/{pie_chart_filename}')
 
     print("Pie chart image saved:", pie_chart_filename)

@@ -75,6 +75,12 @@ def process_transcript_upload_route():
                 airtimes_chart_path=airtimes_chart_path
                 )
             db.session.add(new_transcript)
+            '''
+            print(transcript_data)
+            print(speakers)
+            print(airtimes)
+            print(airtimes_chart_path)
+            '''
             processed_files.append(file.filename)  # Keep track of successfully processed files
         except Exception as e:
             print(f'Error processing file {file.filename}: {e}', 'error')
@@ -106,21 +112,34 @@ def transcript_display_route(transcript_id):
 @app.route('/delete_transcript/<int:transcript_id>', methods=['POST'])
 def delete_transcript_route(transcript_id):
     transcript_to_delete = Transcript.query.get_or_404(transcript_id)
+
+    airtimes_chart_path = os.path.join(app.static_folder, transcript_to_delete.airtimes_chart_path)
+    if os.path.exists(airtimes_chart_path):
+        os.remove(airtimes_chart_path) 
+        print("Airtimes pie chart image deleted:", airtimes_chart_path)
+
     db.session.delete(transcript_to_delete)
     db.session.commit()
-    flash('Transcript deleted successfully', 'success')
+    print('Transcript deleted successfully')
     return redirect(url_for('index'))
 
 @app.route('/delete_all_transcripts', methods=['POST'])
 def delete_all_transcripts_route():
     try:
+        transcripts = Transcript.query.all()
+        for transcript in transcripts:
+            airtimes_chart_path = os.path.join(app.static_folder, transcript.airtimes_chart_path)
+            if os.path.exists(airtimes_chart_path):
+                os.remove(airtimes_chart_path) 
+                print("Airtimes pie chart image deleted:", airtimes_chart_path)
+
         # Deletes all transcripts from the database
         Transcript.query.delete()
         db.session.commit()
-        flash('All transcripts have been deleted successfully', 'success')
+        print('All transcripts have been deleted successfully')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting transcripts: {e}', 'error')
+        print(f'Error deleting transcripts: {e}')
     return redirect(url_for('index'))
 
 
