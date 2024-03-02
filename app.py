@@ -17,6 +17,10 @@ class Transcript(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), unique=True, nullable=False)
     text = db.Column(db.Text, nullable=False)
+    transcript_data = db.Column(db.JSON, nullable=True)
+    speakers = db.Column(db.JSON, nullable=True)  # Store list of unique speakers
+    airtimes = db.Column(db.JSON, nullable=True)  # Store airtime data
+    airtimes_chart_path = db.Column(db.String(255), nullable=True)
 
     def __repr__(self):
         return f'<Transcript {self.filename}>'
@@ -42,7 +46,7 @@ def process_transcript_upload_route():
     processed_files = []
     for file in files:
         if not file.filename.endswith('.txt'):
-            flash(f'Invalid file type for {file.filename}. Please upload .txt files', 'error')
+            print(f'Invalid file type for {file.filename}. Please upload .txt files', 'error')
             continue  # Skip to the next file
 
         try:
@@ -57,11 +61,23 @@ def process_transcript_upload_route():
                 db.session.commit()  # Commit the delete before adding a new record
             
             # Save new transcript to database
-            new_transcript = Transcript(filename=file.filename, text=text)
+            transcript_data = parse_transcript(text)
+            speakers = get_list_of_speakers(transcript_data)
+            airtimes = calculate_airtimes(transcript_data)
+            airtimes_chart_path = generate_pie_chart(airtimes, file.filename)
+
+            new_transcript = Transcript(
+                filename=file.filename,
+                text=text,
+                transcript_data=transcript_data,
+                speakers=speakers,
+                airtimes=airtimes,
+                airtimes_chart_path=airtimes_chart_path
+                )
             db.session.add(new_transcript)
             processed_files.append(file.filename)  # Keep track of successfully processed files
         except Exception as e:
-            flash(f'Error processing file {file.filename}: {e}', 'error')
+            print(f'Error processing file {file.filename}: {e}', 'error')
     
     db.session.commit()  # Commit once after processing all files
     
@@ -78,13 +94,13 @@ def process_transcript_upload_route():
         # Re-render index page with updated list of transcripts
         return render_template('index.html', transcripts=transcripts)
 
+# Display a single transcript
 @app.route('/transcript/<int:transcript_id>')
 def transcript_display_route(transcript_id):
     transcript = Transcript.query.get_or_404(transcript_id)
-    transcript_data = parse_transcript(transcript.text)
-    speakers = get_list_of_speakers(transcript_data)
+    transcript_data = transcript.transcript_data
+    speakers = transcript.speakers
 
-    # Render your original transcript_display.html with the fetched data
     return render_template('transcript_display.html', transcript_id=transcript_id, filename=transcript.filename, transcript=transcript, transcript_data=transcript_data, speakers=speakers)
 
 @app.route('/delete_transcript/<int:transcript_id>', methods=['POST'])
@@ -107,47 +123,14 @@ def delete_all_transcripts_route():
         flash(f'Error deleting transcripts: {e}', 'error')
     return redirect(url_for('index'))
 
-'''
-# For transcript file upload
-@app.route('/process_transcript_upload', methods=['POST'])
-def process_transcript_upload_route():
-    if 'file' not in request.files or request.files['file'].filename =='':
-        flash(f'No file selected', 'error')
-        return redirect(url_for('index'))
-    
-    file = request.files['file']
-    if not file.filename.endswith('.txt'):
-        flash(f'Invalid file type. Please upload a .txt file', 'error')
-        return redirect(url_for('index'))
-    
-    try:
-        text = file.read().decode('utf-8')
-        print("Text file uploaded:", text)
-
-    # Parse uploaded transcript into a Python dictionary and store in session
-        transcript_data = parse_transcript(text)
-        session['transcript_data'] = transcript_data
-
-        speakers = get_list_of_speakers(transcript_data)
-        session['speakers'] = speakers
-
-        filename = request.files['file'].filename
-        session['filename'] = filename
-
-        return render_template('transcript_display.html', filename=filename, transcript_data=transcript_data, speakers=speakers)
-
-    except Exception as e:
-         flash(f'Error processing file: {e}', 'error')
-         return redirect(url_for('index'))
-'''
 
 @app.route('/filter_by_speaker/<int:transcript_id>', methods=['GET'])
 def filter_by_speaker_route(transcript_id):
     selected_speaker = request.args.get('speaker')
 
     transcript = Transcript.query.get_or_404(transcript_id)
-    transcript_data = parse_transcript(transcript.text)
-    speakers = get_list_of_speakers(transcript_data)
+    transcript_data = transcript.transcript_data
+    speakers = transcript.speakers
     filename = transcript.filename
     # No filtering
     if selected_speaker == 'Default':
@@ -161,18 +144,17 @@ def filter_by_speaker_route(transcript_id):
 @app.route('/analyze_airtime/<int:transcript_id>', methods=['GET'])
 def analyze_airtime_route(transcript_id):    
     transcript = Transcript.query.get_or_404(transcript_id)
-    transcript_data = parse_transcript(transcript.text)
-    speakers = get_list_of_speakers(transcript_data)
+    transcript_data = transcript.transcript_data
+    speakers = transcript.speakers
     filename = transcript.filename
-
-    airtimes = calculate_airtimes(transcript_data)
+    airtimes = transcript.airtimes
+    airtimes_chart_path = transcript.airtimes_chart_path
     total_airtime = sum(airtimes.values())
 
     # Sort airtimes in descending order
     sorted_airtimes = {k: v for k, v in sorted(airtimes.items(), key=lambda item: item[1], reverse=True)}
 
-    pie_chart_filename = generate_pie_chart(sorted_airtimes)
-    return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, pie_chart_filename=pie_chart_filename)
+    return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, airtimes_chart_path=airtimes_chart_path)
 
 def main():
     print("Running...")
