@@ -110,15 +110,15 @@ def calculate_airtimes(transcript_data):
     return rounded_airtimes
 
 
-def generate_pie_chart(airtimes):
+def generate_pie_chart(airtimes, filename):
     labels = airtimes.keys()
     sizes = airtimes.values()
 
     plt.figure(figsize=(8, 8))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', textprops={'fontsize': 18})
-    plt.title('Distribution of Airtime by Speaker', fontsize=20)
+    plt.title('Distribution of Airtime by Speaker: ' + filename , fontsize=20)
 
-    pie_chart_filename = 'pie_chart.png'
+    pie_chart_filename = 'pie_chart_' + filename + '.png'
     plt.savefig(f'static/{pie_chart_filename}')
 
     print("Pie chart image saved:", pie_chart_filename)
