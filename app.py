@@ -1,35 +1,33 @@
-from utils import parse_transcript, get_list_of_speakers, filter_by_speaker, calculate_airtimes, generate_pie_chart
 import os
+from flask import Flask, render_template, request, redirect, url_for, flash
+from extensions import db, cache
+from models import *
+from utils import parse_transcript, get_list_of_speakers, filter_by_speaker, calculate_airtimes, generate_pie_chart, calculate_total_words, invalidate_cache, get_or_set_cache
+from flask_caching import Cache
 
-# Web app
-from flask import Flask, render_template, request, redirect, url_for, flash, session 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
 
-# Database
-from flask_sqlalchemy import SQLAlchemy
+# Configurations
+app.config['CACHE_TYPE'] = 'SimpleCache'
+app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # Default cache timeout 5 minutes
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///transcripts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 
-class Transcript(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    filename = db.Column(db.String(255), unique=True, nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    transcript_data = db.Column(db.JSON, nullable=True)
-    speakers = db.Column(db.JSON, nullable=True)  # Store list of unique speakers
-    airtimes = db.Column(db.JSON, nullable=True)  # Store airtime data
-    airtimes_chart_path = db.Column(db.String(255), nullable=True)
-
-    def __repr__(self):
-        return f'<Transcript {self.filename}>'
+# Initialize extensions with the app
+db.init_app(app)
+cache.init_app(app)
 
 # Route for the home page
 @app.route('/')  
 def index():
-    transcripts = Transcript.query.all() 
-    return render_template('index.html', transcripts=transcripts)  
+    transcripts = Transcript.query.all()
+    total_words = get_or_set_cache('total_words', calculate_total_words)
+   
+    return render_template('index.html', 
+                           transcripts=transcripts,
+                           total_words=total_words)  
 
 @app.route('/process_transcript_upload', methods=['POST'])
 def process_transcript_upload_route():
@@ -86,20 +84,24 @@ def process_transcript_upload_route():
             print(f'Error processing file {file.filename}: {e}', 'error')
     
     db.session.commit()  # Commit once after processing all files
-    
+    invalidate_cache()
+
     if not processed_files:
         # If no files were processed successfully, redirect to upload page
         print('No files processed')
-        return redirect(url_for('index'))
     else:
         print(f'Successfully processed files: {", ".join(processed_files)}')
-
-     # Assuming we've saved each transcript and have their IDs
+    
+    return redirect(url_for('index'))
+    '''
+        # Assuming we've saved each transcript and have their IDs
         transcripts = Transcript.query.all() 
-
+        total_words = get_or_set_cache('total_words', calculate_total_words)
         # Re-render index page with updated list of transcripts
-        return render_template('index.html', transcripts=transcripts)
-
+        return render_template('index.html', 
+                               transcripts=transcripts,
+                               total_words=total_words)
+    '''
 # Display a single transcript
 @app.route('/transcript/<int:transcript_id>')
 def transcript_display_route(transcript_id):
@@ -120,6 +122,7 @@ def delete_transcript_route(transcript_id):
 
     db.session.delete(transcript_to_delete)
     db.session.commit()
+    invalidate_cache()
     print('Transcript deleted successfully')
     return redirect(url_for('index'))
 
@@ -140,6 +143,7 @@ def delete_all_transcripts_route():
     except Exception as e:
         db.session.rollback()
         print(f'Error deleting transcripts: {e}')
+    invalidate_cache()
     return redirect(url_for('index'))
 
 

@@ -10,7 +10,7 @@
 
 <hr>
 <!---------------Text file upload------------------->
-    <h2>Analyze transcript files (*.txt):</h2>
+    <h2>Upload transcript files (*.txt):</h2>
     <p>*Assumes the texts follow the output format of the 
         <a href="https://archive.mpi.nl/tla/elan" target="_blank">ELAN transcription tool.</a>
         See a sample <a href="{{ url_for('static', filename='sample_transcript_1.txt') }}" target="_blank">here.</a></p>
@@ -45,6 +45,7 @@
         {% endfor %}
     </ul>
 
+    <p><b>Total words: </b>{{total_words}}</p>
     <form action="{{ url_for('delete_all_transcripts_route') }}" method="post" onsubmit="return confirm('Are you sure you want to remove all transcripts? This action cannot be undone.');">
         <input type="submit" value="Clear database">
     </form>
