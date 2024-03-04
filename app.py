@@ -175,6 +175,28 @@ def analyze_airtime_route(transcript_id):
 
     return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, airtimes_chart_path=airtimes_chart_path)
 
+@app.route('/search_all', methods=['GET'])
+def search_all_route():
+    search_query = request.args.get('search_query')
+
+    matching_transcripts = Transcript.query.filter(
+        Transcript.transcript_data.contains(search_query)).all()
+    
+    # Extract matching speeches from the transcripts
+    search_results = []
+    for transcript in matching_transcripts:
+        for entry in transcript.transcript_data:
+            if search_query.lower() in entry['speech'].lower():
+                search_results.append({
+                    'filename': transcript.filename,
+                    'speaker': entry['speaker'],
+                    'timestamp': entry['timestamp'],
+                    'speech': entry['speech']
+                })
+    return render_template('search_results.html', 
+                           search_results=search_results, 
+                           search_query=search_query)
+
 def main():
     print("Running...")
     with app.app_context():
