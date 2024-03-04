@@ -10,47 +10,8 @@ from io import BytesIO
 from datetime import datetime
 from collections import defaultdict
 
-'''
-  # Load spaCy English model
-nlp = spacy.load('en_core_web_sm')
-
-def preprocess(text):
-        cleaned = re.sub('[\n\t]+', ' ', text)
-        doc = nlp(cleaned)
-        return doc
-      
-def lemmatize(doc):
-    # Extract lemmatized tokens excluding punctuations and whitespace
-    lemmatized = [token.lemma_ for token in doc if not token.is_punct and not token.is_space]
-    return lemmatized
-
-def make_word_cloud(list_of_words):
-                # Generate word cloud from list of words
-        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(list_of_words))
-
-        # Save the word cloud image to a BytesIO object
-        img_buffer = BytesIO()
-        wordcloud.to_image().save(img_buffer, format='PNG')
-        img_buffer.seek(0)
-
-        # Encode the image as base64 to embed in the HTML
-        img_data = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
-
-        return img_data
-
-def visualize_dependency(doc):
-       # return displacy.render(doc, style="dep", options={'distance': 120}, jupyter=False)
-        sentence_visualizations = []
-        for sent in doc.sents:
-                 # Process each sentence separately
-                print("Processing Sentence:", sent.text)
-                sent_doc = nlp(sent.text)
-                
-                visualize_data = displacy.render(sent_doc, style="dep", options={'distance': 120}, jupyter=False)
-                sentence_visualizations.append(visualize_data)
-        
-        return sentence_visualizations
-'''
+from models import Transcript
+from extensions import db, cache
 
 # Parse transcript text (assumes ELAN format)
 # Return [{'speaker': ____, 'speech':___, 'timestamp':____}, {...}]
@@ -123,3 +84,71 @@ def generate_pie_chart(airtimes, filename):
 
     print("Pie chart image saved:", pie_chart_filename)
     return pie_chart_filename
+
+def calculate_total_words():
+    total_words = cache.get('total_words')
+    if total_words is None:
+        print('Updating total words...')
+        total_words = 0
+        transcripts = Transcript.query.all()
+        for transcript in transcripts:
+            for entry in transcript.transcript_data:
+                total_words += len(entry['speech'].split()) # Add number of words in each speech entry
+
+        cache.set('total_words', total_words, timeout=300)
+        print('New total words in database:', total_words)
+    return total_words
+
+# Invalidate the cache so that it can be recalculated to reflect changes from upload, delete, etc.
+def invalidate_cache():
+    cache.delete('total_words')
+    cache.delete('total_entries')
+    
+def get_or_set_cache(key, calculation_func):
+    cached_value = cache.get(key)
+    if cached_value is None:
+        cached_value = calculation_func()
+        cache.set(key, cached_value, timeout=300)  # Adjust timeout as needed
+    return cached_value
+
+'''
+  # Load spaCy English model
+nlp = spacy.load('en_core_web_sm')
+
+def preprocess(text):
+        cleaned = re.sub('[\n\t]+', ' ', text)
+        doc = nlp(cleaned)
+        return doc
+      
+def lemmatize(doc):
+    # Extract lemmatized tokens excluding punctuations and whitespace
+    lemmatized = [token.lemma_ for token in doc if not token.is_punct and not token.is_space]
+    return lemmatized
+
+def make_word_cloud(list_of_words):
+                # Generate word cloud from list of words
+        wordcloud = WordCloud(width=800, height=400, background_color='white').generate(' '.join(list_of_words))
+
+        # Save the word cloud image to a BytesIO object
+        img_buffer = BytesIO()
+        wordcloud.to_image().save(img_buffer, format='PNG')
+        img_buffer.seek(0)
+
+        # Encode the image as base64 to embed in the HTML
+        img_data = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+
+        return img_data
+
+def visualize_dependency(doc):
+       # return displacy.render(doc, style="dep", options={'distance': 120}, jupyter=False)
+        sentence_visualizations = []
+        for sent in doc.sents:
+                 # Process each sentence separately
+                print("Processing Sentence:", sent.text)
+                sent_doc = nlp(sent.text)
+                
+                visualize_data = displacy.render(sent_doc, style="dep", options={'distance': 120}, jupyter=False)
+                sentence_visualizations.append(visualize_data)
+        
+        return sentence_visualizations
+'''
