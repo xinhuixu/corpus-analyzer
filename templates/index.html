@@ -8,7 +8,7 @@
 <body>
     <h1>Corpus analyzer (under construction)</h1>
 
-
+<hr>
 <!---------------Text file upload------------------->
     <h2>Analyze transcript files (*.txt):</h2>
     <p>*Assumes the texts follow the output format of the 
@@ -20,12 +20,18 @@
         <br>
         <input type="submit" value="Submit">
     </form>
-
-
+   
+    <hr>
+<!---------------Database display------------------->
     <h2>Transcripts stored in local database:</h2>
-    <form action="{{ url_for('delete_all_transcripts_route') }}" method="post" onsubmit="return confirm('Are you sure you want to remove all transcripts? This action cannot be undone.');">
-        <input type="submit" value="Clear database">
+
+    <h3 style="display: inline;">Search:</h3>
+    <form action="{{ url_for('search_all_route') }}" method="get" style="display: inline;">
+        <input type="text" id="search_query" name="search_query" placeholder="Enter a word or phrase" style="display: inline;">
+        <input type="submit" value="Search" style="display: inline;">
     </form>
+    
+
     <ul>
         {% for transcript in transcripts %}
         <li>
@@ -38,5 +44,9 @@
         </li>
         {% endfor %}
     </ul>
+
+    <form action="{{ url_for('delete_all_transcripts_route') }}" method="post" onsubmit="return confirm('Are you sure you want to remove all transcripts? This action cannot be undone.');">
+        <input type="submit" value="Clear database">
+    </form>
 </body>
 </html>

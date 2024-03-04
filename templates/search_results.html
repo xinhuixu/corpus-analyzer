@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search results</title>
+</head>
+<body>
+    <h2>Search results for "{{ search_query }}":</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>Speaker</th>
+                <th>Timestamp</th>
+                <th>Speech</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in search_results %}
+            <tr>
+                <td>{{ result.filename }}</td>
+                <td>{{ result.speaker }}</td>
+                <td>{{ result.timestamp }}</td>
+                <td>{{ result.speech }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/">Return to index</a>
+</body>
+</html>
