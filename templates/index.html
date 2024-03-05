@@ -29,6 +29,12 @@
     <form action="{{ url_for('search_all_route') }}" method="get" style="display: inline;">
         <input type="text" id="search_query" name="search_query" placeholder="Enter a word or phrase" style="display: inline;">
         <input type="submit" value="Search" style="display: inline;">
+        
+        <input type="radio" id="partial_match" name="search_mode" value="partial_match" checked>
+        <label for="partial_match">All matches (default)</label>
+        <input type="radio" id="whole_word" name="search_mode" value="whole_word">
+        <label for="whole_word">Whole words</label>
+        
     </form>
     
 
