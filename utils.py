@@ -9,6 +9,7 @@ import base64
 from io import BytesIO
 from datetime import datetime
 from collections import defaultdict
+from markupsafe import Markup, escape
 
 from models import Transcript
 from extensions import db, cache
@@ -110,6 +111,22 @@ def get_or_set_cache(key, calculation_func):
         cached_value = calculation_func()
         cache.set(key, cached_value, timeout=300)  # Adjust timeout as needed
     return cached_value
+
+def highlight_search_term(text, search_term):
+    # Escape the text and search term to prevent XSS
+    escaped_text = escape(text)
+    escaped_search_term = escape(search_term)
+    
+    # Use case-insensitive replacement to highlight search term
+    highlighted_text = re.sub(
+        f"({escaped_search_term})", 
+        r"<span style='background-color: #FFFF00; font-weight: bold;'>\1</span>", 
+        escaped_text, 
+        flags=re.IGNORECASE
+    )
+    
+    # Markup the highlighted text so it renders as HTML
+    return Markup(highlighted_text)
 
 '''
   # Load spaCy English model

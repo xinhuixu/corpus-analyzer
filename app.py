@@ -1,9 +1,9 @@
-import os
+import os, re
 from flask import Flask, render_template, request, redirect, url_for, flash
 from extensions import db, cache
 from models import *
-from utils import parse_transcript, get_list_of_speakers, filter_by_speaker, calculate_airtimes, generate_pie_chart, calculate_total_words, invalidate_cache, get_or_set_cache
-from flask_caching import Cache
+from utils import *
+# from utils import parse_transcript, get_list_of_speakers, filter_by_speaker, calculate_airtimes, generate_pie_chart, calculate_total_words, invalidate_cache, get_or_set_cache
 
 app = Flask(__name__)
 app.secret_key = os.urandom(16)
@@ -182,21 +182,36 @@ def analyze_airtime_route(transcript_id):
 @app.route('/search_all', methods=['GET'])
 def search_all_route():
     search_query = request.args.get('search_query')
-
-    matching_transcripts = Transcript.query.filter(
-        Transcript.transcript_data.contains(search_query)).all()
+    search_mode = request.args.get('search_mode')
+    
+    if search_mode == 'whole_word': # EX: "are" returns "Are you..." but not "grandparents"
+        matching_transcripts = Transcript.query.all()
+    elif search_mode == 'partial_match': # Every transcript that has partial match
+        matching_transcripts = Transcript.query.filter(
+            Transcript.transcript_data.contains(search_query)).all()
     
     # Extract matching speeches from the transcripts
     search_results = []
     for transcript in matching_transcripts:
         for entry in transcript.transcript_data:
-            if search_query.lower() in entry['speech'].lower():
-                search_results.append({
-                    'filename': transcript.filename,
-                    'speaker': entry['speaker'],
-                    'timestamp': entry['timestamp'],
-                    'speech': entry['speech']
-                })
+            # Check the speech for the search query based on the search mode
+            if search_mode == 'whole_word':
+                if re.search(r'\b{}\b'.format(re.escape(search_query)), entry['speech'], re.IGNORECASE):
+                    search_results.append({
+                        'filename': transcript.filename,
+                        'speaker': entry['speaker'],
+                        'timestamp': entry['timestamp'],
+                        'speech': highlight_search_term(entry['speech'], search_query)
+                    })
+            elif search_mode == 'partial_match':
+                if search_query.lower() in entry['speech'].lower():
+                    search_results.append({
+                        'filename': transcript.filename,
+                        'speaker': entry['speaker'],
+                        'timestamp': entry['timestamp'],
+                        'speech': highlight_search_term(entry['speech'], search_query)
+                    })
+    
     return render_template('search_results.html', 
                            search_results=search_results, 
                            search_query=search_query)
