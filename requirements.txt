@@ -1,6 +1,5 @@
-Flask>=3.0.2
-matplotlib>=3.8.2
-
-# wordcloud==1.9.3
-# spacy>=3.0.0,<4.0.0
-# en_core_web_sm>=3.0.0,<4.0.0
+Flask==3.0.2
+Flask_Caching==2.1.0
+flask_sqlalchemy==3.1.1
+MarkupSafe==2.1.4
+matplotlib==3.8.2
