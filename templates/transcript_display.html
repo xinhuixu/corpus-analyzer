@@ -2,33 +2,8 @@
 <html>
 <head>
     <title>Transcript: {{ filename }} </title>
-    <style>
-        header {
-            position: fixed;
-            top: 0;
-            right: 0;
-            padding: 2px;
-            background-color: #f9f9f9; /* Light grey background */
-            z-index: 1000; /* Ensures it stays on top of other content */
-        }
-        img {
-            max-width: 500px;
-            height: auto;
-        }
-        .airtime-button {
-            background-color: #4CAF50; 
-            color: white; 
-            padding: 12px 20px; 
-            font-size: 16px; 
-            font-family: serif;
-            font-weight: bold;
-            border-radius: 4px; /* Rounded corners */
-            cursor: pointer; /* Cursor on hover */
-    }
-    .airtime-button:hover {
-        background-color: #45a049; /* Darker green */
-    }
-    </style>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <h2>Transcript: {{ filename }}</h2>

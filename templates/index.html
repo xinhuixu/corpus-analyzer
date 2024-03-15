@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corpus analyzer (under construction)</title>
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <h1>Corpus analyzer (under construction)</h1>
@@ -50,6 +51,37 @@
         </li>
         {% endfor %}
     </ul>
+
+    <form action="{{ url_for('aggregate_airtime_analysis_route') }}" method="post">
+        <input type="submit" class="airtime-button" value="Aggregate airtime analysis">
+    </form>
+    
+    {% if pie_chart_url %}
+    <div>
+        <img src="{{ pie_chart_url }}" alt="Aggregate airtime pie chart">
+    </div>
+    {% endif %}
+
+    {% if aggregated_airtimes %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Speaker</th>
+                <th>Airtime (seconds)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for speaker, duration in aggregated_airtimes.items() %}
+            <tr>
+                <td>{{ speaker }}</td>
+                <td>{{ duration }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    {% endif %}
 
     <p><b>Total words: </b>{{total_words}}</p>
     <form action="{{ url_for('delete_all_transcripts_route') }}" method="post" onsubmit="return confirm('Are you sure you want to remove all transcripts? This action cannot be undone.');">

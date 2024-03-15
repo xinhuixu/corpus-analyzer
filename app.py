@@ -179,6 +179,24 @@ def analyze_airtime_route(transcript_id):
 
     return render_template('transcript_display.html', transcript_id=transcript_id, filename=filename, transcript_data=transcript_data, speakers=speakers, airtimes=sorted_airtimes, total_airtime=total_airtime, airtimes_chart_path=airtimes_chart_path)
 
+from flask import flash, redirect, url_for
+
+@app.route('/aggregate_airtime_analysis', methods=['POST'])
+def aggregate_airtime_analysis_route():
+    aggregated_airtimes = aggregate_airtimes()
+    pie_chart_filename = generate_pie_chart(aggregated_airtimes, "aggregate")
+    print('Aggregate airtime analysis completed. Chart saved as: ' + pie_chart_filename)
+    pie_chart_url = url_for('static', filename="airtimes_chart_aggregate.png")
+ 
+    transcripts = Transcript.query.all()
+    total_words = get_or_set_cache('total_words', calculate_total_words)
+    
+    return render_template('index.html', 
+                           transcripts=transcripts,
+                           total_words=total_words,
+                           pie_chart_url=pie_chart_url,
+                           aggregated_airtimes=aggregated_airtimes)
+
 @app.route('/search_all', methods=['GET'])
 def search_all_route():
     search_query = request.args.get('search_query')
