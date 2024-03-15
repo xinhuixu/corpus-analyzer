@@ -71,6 +71,21 @@ def calculate_airtimes(transcript_data):
     rounded_airtimes = {speaker: round(duration, 1) for speaker, duration in airtimes.items()}
     return rounded_airtimes
 
+# Sum the airtime data for all speakers across all transcripts
+# Airtime data for each transcript is already stored in JSON format in the database
+def aggregate_airtimes():
+    aggregated_airtimes = defaultdict(float)
+
+    transcripts = Transcript.query.all()
+    for transcript in transcripts:
+        for speaker, duration in transcript.airtimes.items():
+            aggregated_airtimes[speaker] += duration
+    
+    rounded_aggregated_airtimes = {speaker: round(duration, 1) 
+                                   for speaker, duration 
+                                   in aggregated_airtimes.items()}
+    
+    return rounded_aggregated_airtimes
 
 def generate_pie_chart(airtimes, filename):
     labels = airtimes.keys()
