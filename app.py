@@ -184,18 +184,20 @@ from flask import flash, redirect, url_for
 @app.route('/aggregate_airtime_analysis', methods=['POST'])
 def aggregate_airtime_analysis_route():
     aggregated_airtimes = aggregate_airtimes()
-    pie_chart_filename = generate_pie_chart(aggregated_airtimes, "aggregate")
-    print('Aggregate airtime analysis completed. Chart saved as: ' + pie_chart_filename)
+    generate_pie_chart(aggregated_airtimes, "aggregate")
+
     pie_chart_url = url_for('static', filename="airtimes_chart_aggregate.png")
  
     transcripts = Transcript.query.all()
     total_words = get_or_set_cache('total_words', calculate_total_words)
     
+    sorted_airtimes = {k: v for k, v in sorted(aggregated_airtimes.items(), key=lambda item: item[1], reverse=True)}
+
     return render_template('index.html', 
                            transcripts=transcripts,
                            total_words=total_words,
                            pie_chart_url=pie_chart_url,
-                           aggregated_airtimes=aggregated_airtimes)
+                           aggregated_airtimes=sorted_airtimes)
 
 @app.route('/search_all', methods=['GET'])
 def search_all_route():
