@@ -14,7 +14,9 @@
     <h2>Upload transcript files (*.txt):</h2>
     <p>*Assumes the texts follow the output format of the 
         <a href="https://archive.mpi.nl/tla/elan" target="_blank">ELAN transcription tool.</a>
-        See a sample <a href="{{ url_for('static', filename='sample_transcript_1.txt') }}" target="_blank">here.</a></p>
+        See a sample <a href="{{ url_for('static', filename='sample_transcript_1.txt') }}" target="_blank">here</a>, and
+        ELAN export instructions <a href="https://docs.google.com/document/d/1_JPYczDaDtflKMWr0RIMK0ziqzmeqTPtrEgPCeQqt9Y/edit?usp=drive_link" target="_blank">here.</a>
+    </p>
     <form action="/process_transcript_upload" method="post" enctype="multipart/form-data">
 
         <input type="file" id="file" name="files" accept=".txt" multiple>
