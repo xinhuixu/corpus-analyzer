@@ -1,0 +1,9 @@
+S000001   This is a test caption.
+TC        00:00:01.140 - 00:00:03.030
+
+S000002   Student 2 says something.
+TC        00:00:02.260 - 00:00:03.900
+
+S000001   Another caption.
+TC        00:00:03.450 - 00:00:04.620
+

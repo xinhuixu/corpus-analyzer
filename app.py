@@ -221,7 +221,7 @@ def search_all_route():
                         'filename': transcript.filename,
                         'speaker': entry['speaker'],
                         'timestamp': entry['timestamp'],
-                        'speech': highlight_search_term(entry['speech'], search_query)
+                        'speech': highlight_search_term(entry['speech'], search_query, search_mode)
                     })
             elif search_mode == 'partial_match':
                 if search_query.lower() in entry['speech'].lower():
@@ -229,12 +229,13 @@ def search_all_route():
                         'filename': transcript.filename,
                         'speaker': entry['speaker'],
                         'timestamp': entry['timestamp'],
-                        'speech': highlight_search_term(entry['speech'], search_query)
+                        'speech': highlight_search_term(entry['speech'], search_query, search_mode)
                     })
     
     return render_template('search_results.html', 
                            search_results=search_results, 
-                           search_query=search_query)
+                           search_query=search_query,
+                           search_mode=search_mode)
 
 def main():
     print("Running...")

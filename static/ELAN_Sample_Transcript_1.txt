@@ -1,0 +1,60 @@
+S000001   So, it's like...
+TC        00:03:36.800 - 00:03:39.000
+S000002   Comparing holidays?
+TC        00:03:39.210 - 00:03:40.987
+T000001   Exactly, comparing holidays using the simple past tense
+TC        00:03:41.000 - 00:03:45.300
+S000003   And tell why it was different?
+TC        00:03:45.500 - 00:03:47.260
+T000001   Yes, focus on the reasons for the differences
+TC        00:03:47.500 - 00:03:51.654
+S000004   Can it be any holiday?
+TC        00:03:52.010 - 00:03:53.487
+T000001   Any holiday or festival that you have experienced
+TC        00:03:53.690 - 00:03:57.021
+S000005   What if I don't celebrate much?
+TC        00:03:57.230 - 00:03:59.999
+T000001   Think of any special day or event, doesn't have to be a major holiday
+TC        00:04:00.210 - 00:04:04.412
+S000006   Got it, so we're practicing narrative skills too?
+TC        00:04:04.620 - 00:04:06.498
+T000001   Precisely, storytelling and using the past tense effectively
+TC        00:04:06.700 - 00:04:10.123
+S000001   And we have to make a PowerPoint?
+TC        00:04:10.330 - 00:04:12.070
+T000001   Yes, a short presentation to share with the class
+TC        00:04:12.280 - 00:04:15.654
+S000002   How many slides?
+TC        00:04:15.860 - 00:04:17.430
+T000001   Three to five slides should be enough
+TC        00:04:17.640 - 00:04:21.012
+S000003   What about pictures?
+TC        00:04:21.220 - 00:04:23.100
+T000001   If you have pictures, great! They make your story more engaging
+TC        00:04:23.310 - 00:04:26.789
+S000004   And we present this Friday?
+TC        00:04:26.990 - 00:04:28.470
+T000001   Yes, we'll start with presentations on Friday
+TC        00:04:28.680 - 00:04:32.100
+S000005   Is there a time limit?
+TC        00:04:32.310 - 00:04:34.213
+T000001   Try to keep it under 5 minutes
+TC        00:04:34.420 - 00:04:38.500
+S000006   Can we work in pairs?
+TC        00:04:38.710 - 00:04:40.289
+T000001   For this assignment, I'd like everyone to work individually
+TC        00:04:40.500 - 00:04:44.000
+S000001   What if we're nervous speaking in front?
+TC        00:04:44.210 - 00:04:46.987
+T000001   Practice makes perfect. This is a safe space to practice and improve
+TC        00:04:47.200 - 00:04:51.600
+S000002   Ok, I think I have an idea already
+TC        00:04:51.810 - 00:04:53.630
+T000001   Great! I'm excited to see what you all come up with
+TC        00:04:53.840 - 00:04:57.321
+S000003   Me too, I have a unique holiday experience
+TC        00:04:57.530 - 00:04:59.410
+T000001   That's the spirit! Unique stories make for memorable presentations
+TC        00:04:59.620 - 00:05:03.987
+S000004   I'll need to dig up some old photos then
+TC        00:05:04.200 - 00:05:06.378

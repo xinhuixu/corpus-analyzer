@@ -20,14 +20,16 @@ from extensions import db, cache
 def parse_transcript(text):
     # Compile a regular expression pattern to match speaker names (Student or Teacher followed by a digit),
     # followed by their speech, and then a timestamp in a specific format.
-   #pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
-   
-    #pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.+?)\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
-
+    '''
+    # Pattern archive as we standardize transcript formatting
+    pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.*?)\n\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+    pattern = re.compile(r"^(Student \d+|Teacher \d+)\s+(.+?)\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})", re.MULTILINE | re.DOTALL)
+    '''
+    
     pattern = re.compile(
-        r"^(Student \d+|Teacher \d+|S\d+|T\d+)\s+(.*?)\s*^TC\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})",
+        r"^(S\d{6}|T\d{6})\s+(.*?)(?=\n[S|T]|\Z)\nTC\s+(\d{2}:\d{2}:\d{2}\.\d{3}\s*-\s*\d{2}:\d{2}:\d{2}\.\d{3})",
         re.MULTILINE | re.DOTALL
-    )
+    ) 
     transcript_data = []
    
     # Use the compiled pattern to find all matches (segments) in the text
@@ -132,14 +134,21 @@ def get_or_set_cache(key, calculation_func):
         cache.set(key, cached_value, timeout=300)  # Adjust timeout as needed
     return cached_value
 
-def highlight_search_term(text, search_term):
+def highlight_search_term(text, search_term, search_mode):
     # Escape the text and search term to prevent XSS
     escaped_text = escape(text)
     escaped_search_term = escape(search_term)
     
+    if search_mode == 'whole_word':
+        # Modify the regex to match whole words only
+        regex_pattern = fr"\b({escaped_search_term})\b"
+    else:
+        # Use the existing pattern for partial matches
+        regex_pattern = fr"({escaped_search_term})"
+    
     # Use case-insensitive replacement to highlight search term
     highlighted_text = re.sub(
-        f"({escaped_search_term})", 
+        regex_pattern,
         r"<span style='background-color: #FFFF00; font-weight: bold;'>\1</span>", 
         escaped_text, 
         flags=re.IGNORECASE

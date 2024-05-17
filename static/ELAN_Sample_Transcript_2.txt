@@ -1,0 +1,40 @@
+S000001   Do Chinese have any special New Year's rituals?
+TC        00:00:10.500 - 00:00:12.300
+T000001   Absolutely, New Year's is a significant celebration here, and there are several rituals people follow.
+TC        00:00:12.310 - 00:00:16.789
+S000002   Can you give us some examples?
+TC        00:00:17.000 - 00:00:18.500
+T000001   Of course. One common ritual is the cleaning of the house.
+TC        00:00:18.510 - 00:00:22.230
+S000003   Is that like spring cleaning in some cultures?
+TC        00:00:22.240 - 00:00:23.670
+T000001   Yes, it's similar. It's believed that cleaning the house before the New Year sweeps away bad luck.
+TC        00:00:23.680 - 00:00:27.400
+S000004   What about food traditions?
+TC        00:00:27.900 - 00:00:30.159
+T000001   Ah, food is a big part of the New Year's celebration. Many families prepare special dishes.
+TC        00:00:30.170 - 00:00:33.980
+S000001   Are there any symbolic foods?
+TC        00:00:34.230 - 00:00:35.987
+T000001   Yes, certain foods are thought to bring luck and prosperity for the coming year.
+TC        00:00:35.998 - 00:00:40.012
+S000002   Like what?
+TC        00:00:40.220 - 00:00:42.679
+T000001   Well, for example, eating long noodles symbolizes longevity.
+TC        00:00:42.690 - 00:00:46.730
+T000001   Another tradition is setting off fireworks to ward off evil spirits.
+TC        00:00:47.730 - 00:00:52.214
+S000003   That sounds exciting! Is it a public display or done at home?
+TC        00:00:52.224 - 00:00:55.639
+T000001   Both actually. There are public firework displays, but many families also set off fireworks at home.
+TC        00:00:55.650 - 00:00:59.870
+S000004   What about resolutions? Do people make New Year's resolutions here?
+TC        00:00:59.880 - 00:01:03.097
+T000001   Yes, resolutions are common. It's seen as a time for setting goals and making positive changes.
+TC        00:01:03.107 - 00:01:07.623
+T000001   Now, let's discuss how these rituals reflect the cultural values of this society.
+TC        00:01:07.933 - 00:01:12.456
+T000001   Understanding the cultural significance behind these traditions gives us deeper insight into the society.
+TC        00:01:12.466 - 00:01:16.789
+S000001   Can we also talk about how these rituals have evolved over time?
+TC        00:01:16.800 - 00:01:18.299
